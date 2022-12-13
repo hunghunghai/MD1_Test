@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        th {
+            border: black 2px solid;
+        }
+        td {
+            border: black 2px solid;
+        }
+    </style>
+</head>
+<body>
+<div style="text-align: center">
+    <label id="validate" style="color: red"></label><br>
+    <label><input id="newStudent" style="width: 500px" type="text" placeholder="The name Student ...."></label>
+    <button onclick="createStudent()" style="background-color: #95ec95; color: red; border-radius: 10px">Create</button>
+    <br>
+    <label><input id="search" style="width: 500px" type="text" placeholder="The name Student ...." oninput="actionSearch()"></label>
+    <button onclick="createStudent()" style="background-color: #d395ec; color: #0066ff; border-radius: 10px">Search</button>
+</div>
+
+<table style="width: 100%; text-align: center; border: black 2px solid">
+    <caption style="color: blue; font-weight: bold">STUDENT MANAGE</caption>
+    <tr>
+        <th>STT</th>
+        <th>NAME</th>
+        <th>EDIT</th>
+        <th>DELETE</th>
+    </tr>
+    <tbody id="drawTable">
+    </tbody>
+</table>
+<script>
+    let listStudent = ['Nguyễn Phi Hùng']
+    let listSearch = [];
+    function showListStudent() {
+        let drawTable = ''
+        for (let i = 0; i < listStudent.length; i++) {
+            drawTable += `<tr>
+                                <td>${i + 1}</td>
+                                <td>${listStudent[i]}</td>
+                                <td><button onclick="updateStudent(${i})" style="background-color: blue; border-radius: 10px; color: white">Edit</button></td>
+                                 <td><button onclick="deleteStudent(${i})" style="background-color: red; border-radius: 10px; color: white">Delete</button></td>
+                           </tr>`
+        }
+        document.getElementById('drawTable').innerHTML = drawTable;
+    }
+    showListStudent()
+    function createStudent() {
+        let newStudent = document.getElementById('newStudent').value;
+        if (newStudent.trim() === '') {
+            document.getElementById('validate').innerHTML = 'The name is required! Please try again!'
+        } else {
+            document.getElementById('validate').innerHTML = '<lable style = "color: blue">' + 'Create Student scuccess!' + '</lable>'
+            listStudent.push(newStudent);
+            showListStudent();
+        }
+    }
+    function updateStudent(index) {
+        let updateStudent = prompt('Enter the name to update --->' + listStudent[index])
+        if (updateStudent.trim() === '') {
+            document.getElementById('validate').innerHTML = 'The name is required! Please try again!'
+        } else {
+            let checkExisted = false;
+            for (let i = 0; i < listStudent.length; i++) {
+                if (updateStudent === listStudent[i]) {
+                    checkExisted = true;
+                    break;
+                }
+            }
+            if (checkExisted) {
+                document.getElementById('validate').innerHTML = 'The name is existed! Please try again!'
+            } else {
+                document.getElementById('validate').innerHTML = '<lable style = "color: blue">' + 'Update Student scuccess!' + '</lable>'
+                listStudent[index] = updateStudent;
+                showListStudent();
+            }
+        }
+    }
+    function deleteStudent(index) {
+        if (confirm('Are you sure delete?')) {
+            document.getElementById('validate').innerHTML = '<lable style = "color: blue">' + 'You Delete' + '</lable>'
+            listStudent.splice(index, 1)
+            showListStudent();
+        } else {
+            document.getElementById('validate').innerHTML = 'Delete click OK !'
+        }
+    }
+    function actionSearch() {
+        let search = document.getElementById('search').value;
+        if (search.trim() === "") {
+            showListStudent();
+        } else {
+            listSearch = [];
+            for (let i = 0; i < listStudent.length; i++) {
+                if (listStudent[i].toLowerCase().search(search.toLowerCase()) !== -1) {
+                    listSearch.push(listStudent[i])
+                }
+            }
+            showListSearch()
+        }
+    }
+    function showListSearch() {
+            let drawTable = ''
+            for (let i = 0; i < listSearch.length; i++) {
+                drawTable += `<tr>
+                                <td>${i + 1}</td>
+                                <td>${listSearch[i]}</td>
+                                <td><button onclick="updateStudent(${i})" style="background-color: blue; border-radius: 10px; color: white">Edit</button></td>
+                                 <td><button onclick="deleteStudent(${i})" style="background-color: red; border-radius: 10px; color: white">Delete</button></td>
+                           </tr>`
+            }
+            document.getElementById('drawTable').innerHTML = drawTable;
+    }
+</script>
+</body>
+</html>
